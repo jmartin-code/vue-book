@@ -1,5 +1,5 @@
 import { store } from "@/components/store";
-import router from ".";
+import router from "./index";
 
 const routeSecurity = () => {
   if (!store.token) {

@@ -10,7 +10,7 @@
 import MainHeader from "./components/MainHeader.vue";
 import MainFooter from "./components/MainFooter.vue";
 import { store } from "./components/store";
-import axios from "axios";
+// import axios from "axios";
 
 const getCookie = (name) => {
   return document.cookie.split(": ").reduce((r, v) => {
@@ -46,22 +46,20 @@ export default {
     }
   },
   async mounted() {
-    const payload = {
-      foo: "bar",
-    };
-    console.log("mounted");
-
-    const response = await axios.post(
-      "http://localhost:8081/admin/api/foo",
-      payload,
-      {
-        headers: {
-          Authorization: "Bearer " + store.token,
-        },
-      }
-    );
-
-    console.log(response.data);
+    // const payload = {
+    //   foo: "bar",
+    // };
+    // console.log("mounted");
+    // const response = await axios.post(
+    //   "http://localhost:8081/api/admin/foo",
+    //   payload,
+    //   {
+    //     headers: {
+    //       Authorization: "Bearer " + store.token,
+    //     },
+    //   }
+    // );
+    // console.log(response.data);
   },
 };
 </script>
