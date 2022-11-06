@@ -13,10 +13,10 @@ const routes = [
   { path: "/login", name: "Login", component: LoginApp },
   { path: "/books", name: "Books", component: Books },
   { path: "/books/:bookName", name: "Book", component: Book },
-  { path: "admin/books", name: "BooksAdmin", component: BooksAdmin },
-  { path: "admin/books/:bookId", name: "BookEdit", component: BookEdit },
-  { path: "admin/users", name: "Users", component: Users },
-  { path: "admin/users/:userId", name: "UserEdit", component: UserEdit },
+  { path: "/admin/books", name: "BooksAdmin", component: BooksAdmin },
+  { path: "/admin/books/:bookId", name: "BookEdit", component: BookEdit },
+  { path: "/admin/users", name: "Users", component: Users },
+  { path: "/admin/users/:userId", name: "UserEdit", component: UserEdit },
 ];
 
 const router = createRouter({ history: createWebHistory(), routes });
