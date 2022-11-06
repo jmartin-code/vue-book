@@ -8,3 +8,14 @@
     </div>
   </div>
 </template>
+
+<script>
+import routeSecurity from "../../router/routeSecurity";
+
+export default {
+  name: "UsersAdmin",
+  beforeMount() {
+    routeSecurity();
+  },
+};
+</script>

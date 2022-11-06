@@ -7,3 +7,14 @@
     </div>
   </div>
 </template>
+
+<script>
+import routeSecurity from "../../router/routeSecurity";
+
+export default {
+  name: "UserEdit",
+  beforeMount() {
+    routeSecurity();
+  },
+};
+</script>
