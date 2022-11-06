@@ -65,7 +65,7 @@
           <div class="float-end">
             <a
               v-if="
-                this.$route.params.userId &&
+                this.$route.params.userId !== '0' &&
                 this.$route.params.userId !== store.user.id
               "
               class="btn btn-danger"
@@ -103,6 +103,7 @@ export default {
         email: "",
         password: "",
       },
+      store,
     };
   },
   methods: {
@@ -141,12 +142,27 @@ export default {
       }
     },
   },
-  beforeMount() {
+  async beforeMount() {
     routeSecurity();
 
     const id = +this.$route.params.userId;
     if (id) {
       //Editing user
+      const user = await axios.post(
+        `${process.env.VUE_APP_API_URL}/api/admin/users/get`,
+        {},
+        { headers: { Authorization: `Bearer ${store.token}` } }
+      );
+
+      if (user.data.error) {
+        notie.alert({
+          type: "error",
+          text: user.data.message,
+        });
+      } else {
+        this.user = user.data;
+        this.user.password = "";
+      }
     }
   },
 };
