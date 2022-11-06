@@ -90,18 +90,17 @@ export default {
   },
   methods: {
     async logout() {
-      console.log("testin");
       try {
         const payload = {
           token: store.token,
         };
 
-        await axios.post("http://localhost:8081/api/logout", payload);
+        await axios.post(process.env.VUE_APP_API_URL + "/api/logout", payload);
         store.token = "";
         store.user = {};
         document.cookie =
           "_site_data=; Path=/; SameSite=Strict; Secure; Expires=Th, 01 Jan 1970 00:00:01 GMT";
-        router.push("/login ");
+        router.push("/login");
       } catch (error) {
         console.log(error);
       }
