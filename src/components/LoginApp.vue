@@ -29,6 +29,10 @@
 <script>
 import FormTag from "./forms/FormTag.vue";
 import TextInput from "./forms/TextInput.vue";
+import axios from "axios";
+import { store } from "./store";
+import router from "./../router/index";
+import notie from "notie";
 
 export default {
   name: "LoginApp",
@@ -40,11 +44,54 @@ export default {
     return {
       email: "",
       password: "",
+      store,
     };
   },
   methods: {
-    submitHandler() {
-      console.log("submitting form");
+    async submitHandler() {
+      try {
+        console.log("submitting form");
+        const payload = {
+          email: this.email,
+          password: this.password,
+        };
+
+        const response = await axios.post(
+          "http://localhost:8081/api/login",
+          payload
+        );
+
+        const data = response.data;
+        store.token = data.data.token.token;
+        store.user = {
+          id: data.data.user.id,
+          first_name: data.data.user.first_name,
+          last_name: data.data.user.last_name,
+          email: data.data.user.email,
+        };
+
+        //store cookie
+        let date = new Date();
+        let expDays = 1;
+        date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
+        const expires = "expires=" + date.toUTCString;
+
+        // set cookie
+        document.cookie =
+          "_site_data=" +
+          JSON.stringify(data.data) +
+          ";" +
+          expires +
+          "; path=/; SameSite=strict; Secure;";
+
+        router.push("/");
+      } catch (error) {
+        console.log(error);
+        notie.alert({
+          type: "error",
+          text: error.response.data.message,
+        });
+      }
     },
   },
 };
