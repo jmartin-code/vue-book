@@ -52,6 +52,28 @@
             :value="user.password"
             name="password"
           ></text-input>
+
+          <hr />
+
+          <div class="float-start">
+            <input class="btn btn-primary me-2" value="Save" type="submit" />
+            <router-link to="/admin/users" class="btn btn-outline-secondary"
+              >Cancel</router-link
+            >
+          </div>
+
+          <div class="float-end">
+            <a
+              v-if="
+                this.$route.params.userId &&
+                this.$route.params.userId !== store.user.id
+              "
+              class="btn btn-danger"
+              href="javascript:void(0)"
+              @click="confirmDelete(this.user.id)"
+              >Delete</a
+            >
+          </div>
         </form-tag>
       </div>
     </div>
@@ -62,7 +84,9 @@
 import routeSecurity from "../../router/routeSecurity";
 import FormTag from "../forms/FormTag.vue";
 import TextInput from "../forms/TextInput.vue";
-// import notie from "notie";
+import notie from "notie";
+import axios from "axios";
+import { store } from "../store";
 
 export default {
   name: "UserEdit",
@@ -80,6 +104,42 @@ export default {
         password: "",
       },
     };
+  },
+  methods: {
+    async submitHandler() {
+      try {
+        const payload = {
+          id: +this.$route.params.userId,
+          first_name: this.user.first_name,
+          last_name: this.user.last_name,
+          email: this.user.email,
+          password: this.user.password,
+        };
+
+        const user = await axios.post(
+          `${process.env.VUE_APP_API_URL}/api/admin/users/save`,
+          payload,
+          { headers: { Authorization: `Bearer ${store.token}` } }
+        );
+
+        if (user.data.error) {
+          notie.alert({
+            type: "error",
+            text: user.data.message,
+          });
+        } else {
+          notie.alert({
+            type: "success",
+            text: "changes saved",
+          });
+        }
+      } catch (error) {
+        notie.alert({
+          type: "error",
+          text: error.message,
+        });
+      }
+    },
   },
   beforeMount() {
     routeSecurity();
