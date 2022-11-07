@@ -5,11 +5,12 @@
       <div class="col">
         <h1 class="mt-3">All Users</h1>
         <hr />
-        <table class="table table-compact table-striped">
+        <table v-if="ready" class="table table-compact table-striped">
           <thead>
             <tr>
               <th>User</th>
               <th>Email</th>
+              <th>Stats</th>
             </tr>
           </thead>
           <tbody>
@@ -20,9 +21,18 @@
                 </router-link>
               </td>
               <td>{{ user.email }}</td>
+              <td v-if="user.token.id">
+                <span class="badge bg-success" @click="logUserOut(user.id)"
+                  >Logged in</span
+                >
+              </td>
+              <td v-else>
+                <span class="badge bg-danger">Not logged in</span>
+              </td>
             </tr>
           </tbody>
         </table>
+        <p v-else>Loading...</p>
       </div>
     </div>
   </div>
@@ -39,7 +49,7 @@ export default {
   data() {
     return {
       users: [],
-      ready: false,
+      ready: false, // add to the other components
     };
   },
   async beforeMount() {
@@ -57,7 +67,7 @@ export default {
         });
       } else {
         this.users = response.data.data.users;
-        console.log(response.data.data.users);
+        this.ready = true;
       }
     } catch (error) {
       notie.alert({
@@ -65,6 +75,24 @@ export default {
         text: error.message,
       });
     }
+  },
+  methods: {
+    logUserOut(id) {
+      if (id !== store.user.id) {
+        notie.confirm({
+          text: "Are you sure you want to log this user out?",
+          submitText: "Log Out",
+          submitCallback: function () {
+            console.log("id", id);
+          },
+        });
+      } else {
+        notie.alert({
+          type: "error",
+          text: "You cannot log yourself out",
+        });
+      }
+    },
   },
 };
 </script>
