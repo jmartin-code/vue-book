@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       users: [],
+      ready: false,
     };
   },
   async beforeMount() {

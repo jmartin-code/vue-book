@@ -65,8 +65,8 @@
           <div class="float-end">
             <a
               v-if="
-                this.$route.params.userId !== '0' &&
-                this.$route.params.userId !== store.user.id
+                +this.$route.params.userId !== 0 &&
+                +this.$route.params.userId !== +store.user.id
               "
               class="btn btn-danger"
               href="javascript:void(0)"
@@ -87,6 +87,7 @@ import TextInput from "../forms/TextInput.vue";
 import notie from "notie";
 import axios from "axios";
 import { store } from "../store";
+import router from "@/router";
 
 export default {
   name: "UserEdit",
@@ -133,6 +134,7 @@ export default {
             type: "success",
             text: "changes saved",
           });
+          router.push("/admin/users");
         }
       } catch (error) {
         notie.alert({
@@ -140,6 +142,32 @@ export default {
           text: error.message,
         });
       }
+    },
+    confirmDelete(id) {
+      notie.confirm({
+        text: "Are you sure you want to delete?",
+        submitText: "Delete",
+        submitCallback: async function () {
+          const response = await axios.post(
+            `${process.env.VUE_APP_API_URL}/api/admin/users/delete`,
+            { id },
+            { headers: { Authorization: `Bearer ${store.token}` } }
+          );
+
+          if (response.data.error) {
+            notie.alert({
+              type: "error",
+              text: response.data.message,
+            });
+          } else {
+            notie.alert({
+              type: "success",
+              text: "User deleted",
+            });
+            router.push("/admin/users");
+          }
+        },
+      });
     },
   },
   async beforeMount() {
@@ -149,7 +177,7 @@ export default {
     if (id) {
       //Editing user
       const user = await axios.post(
-        `${process.env.VUE_APP_API_URL}/api/admin/users/get`,
+        `${process.env.VUE_APP_API_URL}/api/admin/users/get/${id}`,
         {},
         { headers: { Authorization: `Bearer ${store.token}` } }
       );
