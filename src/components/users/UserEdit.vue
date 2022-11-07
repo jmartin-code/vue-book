@@ -53,6 +53,30 @@
             name="password"
           ></text-input>
 
+          <div class="form-check">
+            <input
+              v-model="user.active"
+              class="form-check-input"
+              type="radio"
+              id="user-active"
+              :value="1"
+            />
+            <label class="form-check-label" for="user-active"> Active </label>
+          </div>
+
+          <div class="form-check">
+            <input
+              v-model="user.active"
+              class="form-check-input"
+              type="radio"
+              id="user-active-2"
+              :value="0"
+            />
+            <label class="form-check-label" for="user-active-2">
+              Inactive
+            </label>
+          </div>
+
           <hr />
 
           <div class="float-start">
@@ -103,6 +127,7 @@ export default {
         last_name: "",
         email: "",
         password: "",
+        active: 0,
       },
       store,
     };
@@ -116,26 +141,29 @@ export default {
           last_name: this.user.last_name,
           email: this.user.email,
           password: this.user.password,
+          active: this.user.active,
         };
 
-        const user = await axios.post(
-          `${process.env.VUE_APP_API_URL}/api/admin/users/save`,
-          payload,
-          { headers: { Authorization: `Bearer ${store.token}` } }
-        );
+        console.log(payload);
 
-        if (user.data.error) {
-          notie.alert({
-            type: "error",
-            text: user.data.message,
-          });
-        } else {
-          notie.alert({
-            type: "success",
-            text: "changes saved",
-          });
-          router.push("/admin/users");
-        }
+        // const user = await axios.post(
+        //   `${process.env.VUE_APP_API_URL}/api/admin/users/save`,
+        //   payload,
+        //   { headers: { Authorization: `Bearer ${store.token}` } }
+        // );
+
+        // if (user.data.error) {
+        //   notie.alert({
+        //     type: "error",
+        //     text: user.data.message,
+        //   });
+        // } else {
+        //   notie.alert({
+        //     type: "success",
+        //     text: "changes saved",
+        //   });
+        //   router.push("/admin/users");
+        // }
       } catch (error) {
         notie.alert({
           type: "error",

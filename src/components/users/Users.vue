@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       users: [],
-      ready: false, // add to the other components
+      ready: false,
     };
   },
   async beforeMount() {
@@ -66,6 +66,7 @@ export default {
           text: response.data.message,
         });
       } else {
+        console.log(response.data);
         this.users = response.data.data.users;
         this.ready = true;
       }
