@@ -4,11 +4,7 @@
       <div class="col">
         <h1 class="mt-3">User Edit</h1>
         <hr />
-        <form-tag
-          @userEditEvent="submitHandler"
-          name="userform"
-          event="userEditEvent"
-        >
+        <form-tag @userEditEvent="submitHandler" name="userForm" event="userEditEvent">
           <text-input
             v-model="user.first_name"
             type="text"
@@ -54,49 +50,31 @@
           ></text-input>
 
           <div class="form-check">
-            <input
-              v-model="user.active"
-              class="form-check-input"
-              type="radio"
-              id="user-active"
-              :value="1"
-            />
-            <label class="form-check-label" for="user-active"> Active </label>
+            <input v-model="user.active" class="form-check-input" type="radio" id="user-active" :value="1" />
+            <label class="form-check-label" for="user-active">Active</label>
           </div>
 
           <div class="form-check">
-            <input
-              v-model="user.active"
-              class="form-check-input"
-              type="radio"
-              id="user-active-2"
-              :value="0"
-            />
-            <label class="form-check-label" for="user-active-2">
-              Inactive
-            </label>
+            <input v-model="user.active" class="form-check-input" type="radio" id="user-active-2" :value="0" />
+            <label class="form-check-label" for="user-active-2">Inactive</label>
           </div>
 
           <hr />
 
           <div class="float-start">
             <input class="btn btn-primary me-2" value="Save" type="submit" />
-            <router-link to="/admin/users" class="btn btn-outline-secondary"
-              >Cancel</router-link
-            >
+            <router-link to="/admin/users" class="btn btn-outline-secondary">Cancel</router-link>
           </div>
 
           <div class="float-end">
             <a
-              v-if="
-                +this.$route.params.userId !== 0 &&
-                +this.$route.params.userId !== +store.user.id
-              "
+              v-if="+this.$route.params.userId !== 0 && +this.$route.params.userId !== +store.user.id"
               class="btn btn-danger"
               href="javascript:void(0)"
               @click="confirmDelete(this.user.id)"
-              >Delete</a
             >
+              Delete
+            </a>
           </div>
         </form-tag>
       </div>
@@ -144,26 +122,22 @@ export default {
           active: this.user.active,
         };
 
-        console.log(payload);
+        const user = await axios.post(`${process.env.VUE_APP_API_URL}/api/admin/users/save`, payload, {
+          headers: { Authorization: `Bearer ${store.token}` },
+        });
 
-        // const user = await axios.post(
-        //   `${process.env.VUE_APP_API_URL}/api/admin/users/save`,
-        //   payload,
-        //   { headers: { Authorization: `Bearer ${store.token}` } }
-        // );
-
-        // if (user.data.error) {
-        //   notie.alert({
-        //     type: "error",
-        //     text: user.data.message,
-        //   });
-        // } else {
-        //   notie.alert({
-        //     type: "success",
-        //     text: "changes saved",
-        //   });
-        //   router.push("/admin/users");
-        // }
+        if (user.data.error) {
+          notie.alert({
+            type: "error",
+            text: user.data.message,
+          });
+        } else {
+          notie.alert({
+            type: "success",
+            text: "changes saved",
+          });
+          router.push("/admin/users");
+        }
       } catch (error) {
         notie.alert({
           type: "error",
@@ -209,6 +183,7 @@ export default {
         {},
         { headers: { Authorization: `Bearer ${store.token}` } }
       );
+      console.log(user.data);
 
       if (user.data.error) {
         notie.alert({

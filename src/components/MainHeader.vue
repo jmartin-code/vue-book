@@ -16,15 +16,11 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link active" aria-current="page" to="/"
-              >Home</router-link
-            >
+            <router-link class="nav-link active" aria-current="page" to="/">Home</router-link>
           </li>
 
           <li class="nav-item">
-            <router-link class="nav-link active" aria-current="page" to="/books"
-              >Books</router-link
-            >
+            <router-link class="nav-link active" aria-current="page" to="/books">Books</router-link>
           </li>
 
           <li v-if="store.token !== ''" class="nav-item dropdown">
@@ -36,36 +32,26 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Admin</a
-            >
+              Admin
+            </a>
             <ul class="dropdown-menu" aria-labelledby="navBarDropDown">
               <li>
-                <router-link class="dropdown-item" to="/admin/users"
-                  >Manage Users</router-link
-                >
+                <router-link class="dropdown-item" to="/admin/users">Manage Users</router-link>
               </li>
               <li>
-                <router-link class="dropdown-item" to="/admin/users/0"
-                  >Add User</router-link
-                >
+                <router-link class="dropdown-item" to="/admin/users/0">Add User</router-link>
               </li>
               <li>
-                <router-link class="dropdown-item" to="/admin/books"
-                  >Manage Books</router-link
-                >
+                <router-link class="dropdown-item" to="/admin/books">Manage Books</router-link>
               </li>
               <li>
-                <router-link class="dropdown-item" to="/admin/books/0"
-                  >Add Book</router-link
-                >
+                <router-link class="dropdown-item" to="/admin/books/0">Add Book</router-link>
               </li>
             </ul>
           </li>
 
           <li class="nav-item">
-            <router-link v-if="!store.token" class="nav-link" to="/login"
-              >Login</router-link
-            >
+            <router-link v-if="!store.token" class="nav-link" to="/login">Login</router-link>
             <a v-else class="nav-link" @click="logout">Logout</a>
           </li>
         </ul>
@@ -98,8 +84,7 @@ export default {
         await axios.post(process.env.VUE_APP_API_URL + "/api/logout", payload);
         store.token = "";
         store.user = {};
-        document.cookie =
-          "_site_data=; Path=/; SameSite=Strict; Secure; Expires=Th, 01 Jan 1970 00:00:01 GMT";
+        document.cookie = "_site_data=; Path=/; SameSite=Strict; Secure; Expires=Th, 01 Jan 1970 00:00:01 GMT";
         router.push("/login");
       } catch (error) {
         console.log(error);

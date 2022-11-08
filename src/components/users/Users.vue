@@ -16,15 +16,11 @@
           <tbody>
             <tr v-for="user in users" :key="user.id">
               <td>
-                <router-link :to="`/admin/users/${user.id}`">
-                  {{ user.last_name }}, {{ user.first_name }}
-                </router-link>
+                <router-link :to="`/admin/users/${user.id}`">{{ user.last_name }}, {{ user.first_name }}</router-link>
               </td>
               <td>{{ user.email }}</td>
               <td v-if="user.token.id">
-                <span class="badge bg-success" @click="logUserOut(user.id)"
-                  >Logged in</span
-                >
+                <span class="badge bg-success" @click="logUserOut(user.id)">Logged in</span>
               </td>
               <td v-else>
                 <span class="badge bg-danger">Not logged in</span>
