@@ -1,7 +1,7 @@
 <template>
   <MainHeader />
   <div>
-    <router-view />
+    <router-view :key="componentKey" @forceUpdate="forceUpdate" />
   </div>
   <MainFooter />
 </template>
@@ -28,7 +28,13 @@ export default {
   data() {
     return {
       store,
+      componentKey: 0,
     };
+  },
+  methods: {
+    forceUpdate() {
+      this.componentKey += 1;
+    },
   },
   beforeMount() {
     // check for cookie

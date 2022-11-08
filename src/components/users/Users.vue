@@ -10,7 +10,8 @@
             <tr>
               <th>User</th>
               <th>Email</th>
-              <th>Stats</th>
+              <th>Active</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -19,6 +20,12 @@
                 <router-link :to="`/admin/users/${user.id}`">{{ user.last_name }}, {{ user.first_name }}</router-link>
               </td>
               <td>{{ user.email }}</td>
+              <td v-if="user.active">
+                <span class="badge bg-success">Active</span>
+              </td>
+              <td v-else>
+                <span class="badge bg-danger">Inactive</span>
+              </td>
               <td v-if="user.token.id">
                 <span class="badge bg-success" @click="logUserOut(user.id)">Logged in</span>
               </td>
@@ -79,8 +86,24 @@ export default {
         notie.confirm({
           text: "Are you sure you want to log this user out?",
           submitText: "Log Out",
-          submitCallback: function () {
-            console.log("id", id);
+          submitCallback: async () => {
+            const response = await axios.post(
+              `${process.env.VUE_APP_API_URL}/api/admin/users/user-logout/${id}`,
+              {},
+              { headers: { Authorization: "Bearer " + store.token } }
+            );
+            if (response.data.error) {
+              notie.alert({
+                type: "error",
+                text: response.data.message,
+              });
+            } else {
+              notie.alert({
+                type: "success",
+                text: response.data.message,
+              });
+              this.$emit("forceUpdate");
+            }
           },
         });
       } else {
