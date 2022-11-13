@@ -28,7 +28,6 @@
 </template>
 
 <script>
-// import { store } from "../store";
 import axios from "axios";
 import notie from "notie";
 
