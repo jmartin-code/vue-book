@@ -191,8 +191,34 @@ export default {
       });
     },
   },
-  beforeMount() {
+  async beforeMount() {
     routeSecurity();
+    // if (this.$route.params.bookId > 0) {
+    // } else {
+    // }
+
+    try {
+      const response = await axios.post(
+        process.env.VUE_APP_API_URL + "/api/admin/authors",
+        {},
+        { headers: { Authorization: "Bearer " + store.token } }
+      );
+      if (response.data.error) {
+        notie.alert({
+          type: "error",
+          text: response.data.message,
+        });
+      } else {
+        console.log(response.data.data);
+        this.authors = response.data.data;
+        // this.ready = true;
+      }
+    } catch (error) {
+      notie.alert({
+        type: "error",
+        text: error.message,
+      });
+    }
   },
 };
 </script>
