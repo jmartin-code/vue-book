@@ -82,7 +82,6 @@ export default {
           text: response.data.message,
         });
       } else {
-        console.log(response.data.data.books);
         this.books = response.data.data.books;
         this.ready = true;
       }

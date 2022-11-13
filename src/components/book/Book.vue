@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="container">
-    <div class="row">
+    <div class="row" v-if="ready">
       <div class="col-md-2">
         <img class="img-fluid img-thumbnail" :src="`${imgPath}/covers/${book.slug}.jpg`" />
       </div>
@@ -21,6 +21,9 @@
         </p>
       </div>
     </div>
+    <div v-else>
+      <p>Loading...</p>
+    </div>
   </div>
 </template>
 
@@ -34,6 +37,7 @@ export default {
     return {
       book: {},
       imgPath: process.env.VUE_APP_IMAGE_URL,
+      ready: false,
     };
   },
   async created() {
@@ -45,7 +49,6 @@ export default {
           text: response.data.message,
         });
       } else {
-        console.log(response.data.data.book);
         this.book = response.data.data.book;
         this.ready = true;
       }
