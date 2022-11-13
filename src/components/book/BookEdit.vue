@@ -41,7 +41,7 @@
             <select-input name="author-id" v-model="book.author_id" :items="authors" required label="Author" />
             <text-input
               v-model="book.publication_year"
-              type="text"
+              type="number"
               required="true"
               label="Publication Year"
               :value="book.publication_year"
@@ -96,7 +96,7 @@ export default {
         id: 0,
         title: "",
         author_id: 0,
-        publication_year: 0,
+        publication_year: null,
         description: "",
         cover: "",
         slug: "",
@@ -122,14 +122,16 @@ export default {
         const payload = {
           id: this.book.id,
           title: this.book.title,
-          author_id: this.book.author_id,
-          publication_year: this.book.publication_year,
+          author_id: +this.book.author_id,
+          publication_year: +this.book.publication_year,
           description: this.book.description,
           cover: this.book.cover,
           slug: this.book.slug,
           genres: this.book.genres,
           genre_ids: this.book.genre_ids,
         };
+
+        // console.log(payload);
 
         const book = await axios.post(`${process.env.VUE_APP_API_URL}/api/admin/books/save`, payload, {
           headers: { Authorization: `Bearer ${store.token}` },
@@ -193,9 +195,35 @@ export default {
   },
   async beforeMount() {
     routeSecurity();
-    // if (this.$route.params.bookId > 0) {
-    // } else {
-    // }
+    if (+this.$route.params.bookId !== 0) {
+      try {
+        const response = await axios.post(
+          process.env.VUE_APP_API_URL + "/api/admin/books/" + this.$route.params.bookId,
+          {},
+          { headers: { Authorization: "Bearer " + store.token } }
+        );
+        if (response.data.error) {
+          notie.alert({
+            type: "error",
+            text: response.data.message,
+          });
+        } else {
+          console.log(response.data.data);
+          const book = response.data.data;
+          let genreArray = [];
+          for (let i = 0; i < book.genres.length; i++) {
+            genreArray.push(book.genres[i].id);
+          }
+          book.genre_ids = genreArray;
+          this.book = book;
+        }
+      } catch (error) {
+        notie.alert({
+          type: "error",
+          text: error.message,
+        });
+      }
+    }
 
     try {
       const response = await axios.post(
@@ -222,3 +250,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.book-cover {
+  max-width: 10em;
+}
+</style>
