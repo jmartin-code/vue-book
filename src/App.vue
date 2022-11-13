@@ -1,7 +1,11 @@
 <template>
   <MainHeader />
   <div>
-    <router-view :key="componentKey" @forceUpdate="forceUpdate" />
+    <router-view v-slot="{ Component }" :key="componentKey" @forceUpdate="forceUpdate">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </div>
   <MainFooter />
 </template>
