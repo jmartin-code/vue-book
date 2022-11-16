@@ -131,8 +131,6 @@ export default {
           genre_ids: this.book.genre_ids,
         };
 
-        // console.log(payload);
-
         const book = await axios.post(`${process.env.VUE_APP_API_URL}/api/admin/books/save`, payload, {
           headers: { Authorization: `Bearer ${store.token}` },
         });
@@ -162,7 +160,6 @@ export default {
       reader.onloadend = () => {
         const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
         this.book.cover = base64String;
-        // alert(base64String);
       };
       reader.readAsDataURL(file);
     },
@@ -208,7 +205,6 @@ export default {
             text: response.data.message,
           });
         } else {
-          console.log(response.data.data);
           const book = response.data.data;
           let genreArray = [];
           for (let i = 0; i < book.genres.length; i++) {
@@ -237,9 +233,8 @@ export default {
           text: response.data.message,
         });
       } else {
-        console.log(response.data.data);
         this.authors = response.data.data;
-        // this.ready = true;
+        // this.ready = true; TODO: add loading state
       }
     } catch (error) {
       notie.alert({

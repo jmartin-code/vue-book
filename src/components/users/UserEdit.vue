@@ -183,7 +183,6 @@ export default {
         {},
         { headers: { Authorization: `Bearer ${store.token}` } }
       );
-      console.log(user.data);
 
       if (user.data.error) {
         notie.alert({

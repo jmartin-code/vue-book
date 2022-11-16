@@ -4,21 +4,9 @@
       <div class="col">
         <h1 class="mt-5">Login</h1>
         <form-tag @myEvent="submitHandler" event="myEvent" name="myForm">
-          <text-input
-            v-model="email"
-            label="Email"
-            type="email"
-            name="email"
-            required="true"
-          ></text-input>
+          <text-input v-model="email" label="Email" type="email" name="email" required="true"></text-input>
 
-          <text-input
-            v-model="password"
-            label="Password"
-            type="password"
-            name="password"
-            required="true"
-          ></text-input>
+          <text-input v-model="password" label="Password" type="password" name="password" required="true"></text-input>
           <input type="submit" class="btn btn-primary" value="Login" />
         </form-tag>
       </div>
@@ -50,16 +38,12 @@ export default {
   methods: {
     async submitHandler() {
       try {
-        console.log("submitting form");
         const payload = {
           email: this.email,
           password: this.password,
         };
 
-        const response = await axios.post(
-          process.env.VUE_APP_API_URL + "/api/login",
-          payload
-        );
+        const response = await axios.post(process.env.VUE_APP_API_URL + "/api/login", payload);
 
         const data = response.data;
         store.token = data.data.token.token;
@@ -78,11 +62,7 @@ export default {
 
         // set cookie
         document.cookie =
-          "_site_data=" +
-          JSON.stringify(data.data) +
-          ";" +
-          expires +
-          "; path=/; SameSite=strict; Secure;";
+          "_site_data=" + JSON.stringify(data.data) + ";" + expires + "; path=/; SameSite=strict; Secure;";
 
         router.push("/");
       } catch (error) {
